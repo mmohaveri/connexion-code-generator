@@ -1,0 +1,10 @@
+# Python
+*.py[oci]
+!/typings/**/**.pyi
+
+# IDEs & Text editors
+*.sw[op]
+.idea
+.vscode
+.DS_Store
+dist/*

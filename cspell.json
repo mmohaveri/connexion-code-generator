@@ -1,0 +1,45 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "ignorePaths": [
+    "dictionaries/**",
+    "config.json",
+    "*.pyc",
+    "*.pyo"
+  ],
+  "dictionaries": [
+    "en-US",
+    "companies",
+    "softwareTerms",
+    "misc"
+  ],
+  "words": [
+    // Python
+    "venv",
+    "pypackages",
+    "Dunder",
+    "lasti",
+    "direnv",
+    // Python packages
+    "connexion",
+    "pydantic",
+    "openapi",
+    "autopep8",
+    "pyright",
+    "pydocstyle",
+    "gettext",
+    "pytest",
+    "mypy",
+    "isort",
+    "pytest",
+    "datamodel",
+    // Other:
+    "dtos",
+    // Proper Name
+    "Cabe",
+    "Mohaveri",
+    "bullparty"
+  ],
+  "flagWords": [],
+  "import": []
+}

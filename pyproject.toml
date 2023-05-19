@@ -1,0 +1,235 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "connexion-code-generator"
+dynamic = ["version"]
+description = 'A CLI tool that generates Protocol or Abstract Classes based on your OpenAPI specification.'
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = [
+  "connexion"
+]
+authors = [
+  { name = "Mahdi Mohaveri", email = "mmohaveri@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Topic :: Software Development :: Code Generators",
+  "Typing :: Typed",
+]
+dependencies = [
+  "click",
+  "PyYAML",
+  "result",
+  "pydantic[email]",
+  "Jinja2",
+  "autopep8",
+]
+
+[project.urls]
+Documentation = "https://github.com/mmohaveri/connexion-code-generator#readme"
+Issues = "https://github.com/mmohaveri/connexion-code-generator/issues"
+Source = "https://github.com/mmohaveri/connexion-code-generator"
+
+[project.scripts]
+connexion-code-generator = "connexion_code_generator.cmd:cli"
+
+[tool.hatch.version]
+path = "src/connexion_code_generator/__about__.py"
+
+[tool.hatch.build]
+ignore-vcs = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/connexion_code_generator"]
+
+
+[[tool.hatch.envs.all.matrix]]
+python = ["3.11"]
+
+[tool.hatch.envs.lint]
+dependencies = [
+    "pyright",
+    "ruff",
+]
+
+[tool.hatch.envs.lint.scripts]
+typing = "pyright"
+spell = 'cspell "**/**"'
+style = [
+    'autopep8 --diff --exit-code  {args:.}',
+    "ruff check {args:.}",
+]
+fmt = [
+    'autopep8 --in-place {args:.}',
+    "ruff --fix {args:.}",
+    "style",
+]
+all = [
+    "spell",
+    "style",
+    "typing",
+]
+
+[tool.ruff]
+line-length = 120
+
+select = ["ALL"]
+
+ignore = [
+    "ANN101", # Forces to type annotate self which is normally not needed.
+    "ASYNC100", # Prevents blocking HTTP method in async function, requires a lot of code change that I can't afford right now.
+    "BLE001", # Tells us to not use `except Exception as e`, which I don't agree with.
+    "C901", # Restricts "McCabe complexity", requires a lot of code change that I can't afford right now.
+    "PLC0414", # Prevents import aliasing with the same name which is required for imports for export purposes.
+    "PLC1901", # Prefers to use empty string as falsy instead of an explicit check. I personally don't like it.
+    "PLR0911", "PLR0912", "PLR0913", "PLR0915", # Needs a lot of refactoring that I can't afford right now.
+    "S113",  # Requests calls should have a timeout, requires more tests due to some requests downloading large files.
+    "S311",  # Use cryptographic-secure RNG, needs more consideration for performance reasons.
+    "TD002", "TD003", # This level of TODO management is not necessary for a single developer project.
+    "TCH001", # Forces to move application imports into a type-checking block which messes with pydantic.
+    "UP034", # Avoid extraneous parentheses which causes "implicit string concatenation" which I don't like.
+    "UP035", # Forces to use "import from", which I personally don't like.
+    "A", # Is for preventing shadows, requires a lot of code change that I can't afford right now.
+    "D", # Forces pydocstyle, I don't like it personally.
+    "DJ", # Is for "Django", which we don't use.
+    "EM", # Forces exception formatting, I don't like it personally.
+    "G", # Forces log formatting, I don't like it personally.
+    "INT", # Is for "gettext", which we don't use.
+    "NPY", # Is for "NumPy", which we don't use.
+    "PYI", # Is for "pyi" files, which we don't use.
+    "PT", # Is for "pytest-style", which we don't use.
+    "PD", # Is for "pandas", which we don't use.
+    "TRY", # is for raise errors, which requires re-factoring that I can't afford right now.
+    ]
+
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+per-file-ignores = {}
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+target-version = "py311"
+
+[tool.ruff.isort]
+required-imports = ["from __future__ import annotations"]
+
+[tool.ruff.flake8-import-conventions]
+banned-from = []
+
+[tool.pyright]
+# pythonVersion = "3.11"
+# pythonPlatform = "Linux"
+# typeCheckingMode = "strict"
+# useLibraryCodeForTypes = true
+# venv = "lint"
+
+# Default strict rules
+strictListInference = true
+strictDictionaryInference = true
+strictSetInference = true
+strictParameterNoneValue = true
+reportMissingModuleSource = "error"
+reportMissingImports = "error"
+reportUndefinedVariable = "error"
+reportAssertAlwaysTrue = "error"
+reportInvalidStringEscapeSequence = "error"
+reportInvalidTypeVarUse = "error"
+reportMissingTypeStubs = "error"
+reportSelfClsParameterName = "error"
+reportUnsupportedDunderAll = "error"
+reportUnusedExpression = "error"
+reportWildcardImportFromLibrary = "error"
+reportGeneralTypeIssues = "error"
+reportOptionalSubscript = "error"
+reportOptionalMemberAccess = "error"
+reportOptionalCall = "error"
+reportOptionalIterable = "error"
+reportOptionalContextManager = "error"
+reportOptionalOperand = "error"
+reportTypedDictNotRequiredAccess = "error"
+reportPrivateImportUsage = "error"
+reportUnboundVariable = "error"
+reportUnusedCoroutine = "error"
+reportConstantRedefinition = "error"
+reportDuplicateImport = "error"
+reportFunctionMemberAccess = "error"
+reportIncompatibleVariableOverride = "error"
+reportIncompleteStub = "error"
+reportInconsistentConstructor = "error"
+reportInvalidStubStatement = "error"
+reportMatchNotExhaustive = "error"
+reportMissingParameterType = "error"
+reportMissingTypeArgument = "error"
+reportOverlappingOverload = "error"
+reportUnknownArgumentType = "error"
+reportUnknownLambdaType = "error"
+reportUnknownParameterType = "error"
+reportUnknownVariableType = "error"
+reportUnnecessaryCast = "error"
+reportUnnecessaryComparison = "error"
+reportUnnecessaryIsInstance = "error"
+reportUnusedClass = "error"
+reportUnusedImport = "error"
+reportUnusedFunction = "error"
+reportUnusedVariable = "error"
+reportUntypedBaseClass = "error"
+reportUntypedClassDecorator = "error"
+reportUntypedFunctionDecorator = "error"
+reportUntypedNamedTuple = "error"
+reportIncompatibleMethodOverride = "error"
+reportPrivateUsage = "error"
+reportCallInDefaultInitializer = "error"
+reportImplicitStringConcatenation = "error"
+reportPropertyTypeMismatch = "error"
+reportUninitializedInstanceVariable = "error"
+reportUnnecessaryTypeIgnoreComment = "error"
+reportMissingSuperCall = "error"
+reportUnusedCallResult = "error"
+# Strict rules with issues
+reportImportCycles = "none"
+reportUnknownMemberType = "none"
+
+[tool.pytest.ini_options]
+python_files = "test_*.py"
+python_classes = "*Tests"
+python_functions = "assert_*"
+
+[tool.autopep8]
+max_line_length = 120
+ignore = ""
+recursive = true
+aggressive = 3
